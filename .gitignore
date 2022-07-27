@@ -1,0 +1,10 @@
+__pycache__
+.idea
+.cache
+.mypy_cache
+.coverage
+venv
+.venv
+coverage.xml
+report.xml
+*.pytest_cache
