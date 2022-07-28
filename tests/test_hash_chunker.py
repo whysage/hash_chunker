@@ -24,7 +24,7 @@ def test_default_usage(
     :param all_items_count: count aff all data elements
     :param expected: expected chunks
     """
-    assert HashChunker().get_chunks(chunk_size, all_items_count) == expected
+    assert list(HashChunker().get_chunks(chunk_size, all_items_count)) == expected
 
 
 @pytest.mark.parametrize(
@@ -33,14 +33,14 @@ def test_default_usage(
         (1, 2, 5, [("00000", "80000"), ("80000", "fffff")]),
     ],
 )
-def test_hash_length(
+def test_chunk_hash_length(
     chunk_size: int,
     all_items_count: int,
     chunk_hash_length: int,
     expected: List[Tuple[str, str]],
 ) -> None:
     """
-    Simple test.
+    Test chunk_hash_length option.
 
     :param chunk_size: chunk elements limit
     :param all_items_count: count aff all data elements
@@ -48,4 +48,4 @@ def test_hash_length(
     :param expected: expected chunks
     """
     hash_chunker = HashChunker(chunk_hash_length=chunk_hash_length)
-    assert hash_chunker.get_chunks(chunk_size, all_items_count) == expected
+    assert list(hash_chunker.get_chunks(chunk_size, all_items_count)) == expected
