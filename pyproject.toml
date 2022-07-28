@@ -2,7 +2,7 @@
 name = "hash_chunker"
 homepage = "https://github.com/whysage/hash_chunker"
 repository = "https://github.com/whysage/hash_chunker"
-version = "0.1.4"
+version = "0.1.5"
 description = "Generator that yields hash chunks for distributed data processing."
 authors = ["Volodymyr Kochetkov <whysages@gmail.com>"]
 license = "MIT"

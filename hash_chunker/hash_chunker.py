@@ -51,7 +51,10 @@ class HashChunker(object):
         previous_position: int,
     ) -> Generator[Tuple[str, str], None, None]:
         while current_position < all_items_count:
-            start = self._position_to_hex(previous_position)
+            if previous_position:
+                start = self._position_to_hex(previous_position)
+            else:
+                start = ""
             stop = self._position_to_hex(current_position)
             yield start, stop
             previous_position = current_position

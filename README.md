@@ -13,7 +13,12 @@ from hash_chunker import HashChunker
 
 chunks = list(HashChunker().get_chunks(chunk_size=1000, all_items_count=2000))
 
-assert chunks == [("0000000000", "8000000000"), ("8000000000", "ffffffffff")]
+assert chunks == [("", "8000000000"), ("8000000000", "ffffffffff")]
+
+# use chunks as tasks for multiprocessing 
+query_part = "hash > :from_hash AND hash <= :to_hash"
+params = {"from_hash": chunk[0], "to_hash": chunk[1]}
+
 ```
  
 ### Description
