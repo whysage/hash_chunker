@@ -11,7 +11,7 @@ pip install hash-chunker
 ```
 from hash_chunker import HashChunker 
 
-chunks = list(HashChunker().get_chunks(chunk_size=1, all_items_count=2))
+chunks = list(HashChunker().get_chunks(chunk_size=1000, all_items_count=2000))
 
 assert chunks == [("0000000000", "8000000000"), ("8000000000", "ffffffffff")]
 ```
