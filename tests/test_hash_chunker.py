@@ -9,7 +9,16 @@ from hash_chunker import HashChunker
 @pytest.mark.parametrize(
     "chunk_size, all_items_count, expected",
     [
-        (1, 2, [("", "8000000000"), ("8000000000", "ffffffffff")]),
+        (1000, 2000, [("", "8000000000"), ("8000000000", "ffffffffff")]),
+        (
+            500,
+            1500,
+            [
+                ("", "5555600000"),
+                ("5555600000", "aaaac00000"),
+                ("aaaac00000", "ffffffffff"),
+            ],
+        ),
     ],
 )
 def test_default_usage(
