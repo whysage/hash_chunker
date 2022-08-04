@@ -1,12 +1,12 @@
 """Hash Chunker helper to provide hash ranges for distributed data processing."""
 import math
 from dataclasses import dataclass
-from typing import Tuple, Generator
+from typing import Generator, Tuple
 
 
 @dataclass
 class HashChunker(object):
-    """Main module class."""
+    """Main class."""
 
     chunk_hash_length: int = 10
     hash_ranges_accuracy: int = 5
@@ -16,17 +16,17 @@ class HashChunker(object):
     hex_f: str = "f"
     hex_format: str = "x"
 
-    def get_chunks(
+    def get_chunks(  # noqa: WPS463
         self,
         chunk_size: int,
         all_items_count: int,
     ) -> Generator[Tuple[str, str], None, None]:
         """
-        Return hash ranges.
+        Return hash chunks.
 
         :param chunk_size: chunk elements limit
         :param all_items_count: count aff all data elements
-        :return: list of chunks
+        :yield: сhunks
         """
         if all_items_count == 0 or chunk_size == 0:
             return
@@ -46,7 +46,7 @@ class HashChunker(object):
     def _add_ranges(
         self,
         all_items_count: int,
-        batch: int,
+        chunk_size: int,
         current_position: int,
         previous_position: int,
     ) -> Generator[Tuple[str, str], None, None]:
@@ -58,7 +58,7 @@ class HashChunker(object):
             stop = self._position_to_hex(current_position)
             yield start, stop
             previous_position = current_position
-            current_position += batch
+            current_position += chunk_size
         start = self._position_to_hex(previous_position)
         stop = self.hex_f * self.chunk_hash_length
         yield start, stop
@@ -66,16 +66,16 @@ class HashChunker(object):
     def _get_positions(
         self,
         all_items_count: int,
-        batch_limit: int,
+        chunk_limit: int,
     ) -> Tuple[int, int, int, int]:
-        scale = self.hex_base ** self.hash_ranges_accuracy / all_items_count
-        batch_limit = math.ceil(batch_limit * scale)
+        scale = self.hex_base**self.hash_ranges_accuracy / all_items_count
+        chunk_limit = math.ceil(chunk_limit * scale)
         all_items_count *= scale
         previous_position = 0
-        current_position = batch_limit
+        current_position = chunk_limit
         return (
             all_items_count,
-            batch_limit,
+            chunk_limit,
             current_position,
             previous_position,
         )
