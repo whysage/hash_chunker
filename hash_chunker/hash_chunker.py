@@ -43,6 +43,12 @@ class HashChunker(object):
             previous_position,
         )
 
+    def get_fixed_chunks(  # noqa: WPS463
+        self,
+        chunks_count: int,
+    ) -> Generator[Tuple[str, str], None, None]:
+        yield None
+
     def _add_ranges(
         self,
         all_items_count: int,
