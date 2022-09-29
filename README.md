@@ -16,6 +16,10 @@ hash_chunker = HashChunker(chunk_hash_length=3)
 chunks = list(hash_chunker.get_chunks(500, 1500))
 assert chunks == [('', '555'), ('555', 'aaa'), ('aaa', 'fff')]
 
+# or
+chunks = list(HashChunker().get_fixed_chunks(2))
+assert chunks == [("", "8000000000"), ("8000000000", "ffffffffff")]
+
 # use chunks as tasks for multiprocessing
 query_part = "hash > :from_hash AND hash <= :to_hash"
 params = {"from_hash": chunk[0], "to_hash": chunk[1]}
