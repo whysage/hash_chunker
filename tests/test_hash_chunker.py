@@ -58,3 +58,30 @@ def test_chunk_hash_length(
     """
     hash_chunker = HashChunker(chunk_hash_length=chunk_hash_length)
     assert list(hash_chunker.get_chunks(chunk_size, all_items_count)) == expected
+
+
+@pytest.mark.parametrize(
+    "chunks_count, expected",
+    [
+        (2, [("", "8000000000"), ("8000000000", "ffffffffff")]),
+        (
+            3,
+            [
+                ("", "5555600000"),
+                ("5555600000", "aaaac00000"),
+                ("aaaac00000", "ffffffffff"),
+            ],
+        ),
+    ],
+)
+def test_get_fixed_chunks(
+    chunks_count: int,
+    expected: List[Tuple[str, str]],
+) -> None:
+    """
+    Simple test.
+
+    :param chunks_count: chunks limit
+    :param expected: expected chunks
+    """
+    assert list(HashChunker().get_fixed_chunks(chunks_count)) == expected
