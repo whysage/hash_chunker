@@ -1,4 +1,4 @@
-name: Linters
+name: Tests
 
 on: [pull_request]
 
@@ -21,8 +21,6 @@ jobs:
           poetry install
       env:
           POETRY_VIRTUALENVS_CREATE: false
-    - name: Analysing the code with linters
+    - name:Run tests
       run: |
-          poetry run flake8
-          poetry run pylint $(git ls-files '*.py')
-          poetry run mypy hash_chunker
+          poetry run pytest tests
