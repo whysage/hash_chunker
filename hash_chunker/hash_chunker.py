@@ -47,6 +47,12 @@ class HashChunker(object):
         self,
         chunks_count: int,
     ) -> Generator[Tuple[str, str], None, None]:
+        """
+        Return fixed number of hash chunks.
+
+        :param chunks_count: chunks limit
+        :yield: chunks
+        """
         yield from self.get_chunks(1, chunks_count)
 
     def _add_ranges(
