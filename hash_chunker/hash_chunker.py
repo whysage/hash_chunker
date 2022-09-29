@@ -47,7 +47,7 @@ class HashChunker(object):
         self,
         chunks_count: int,
     ) -> Generator[Tuple[str, str], None, None]:
-        yield None
+        yield from self.get_chunks(1, chunks_count)
 
     def _add_ranges(
         self,
