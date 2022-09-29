@@ -21,6 +21,6 @@ jobs:
           poetry install
       env:
           POETRY_VIRTUALENVS_CREATE: false
-    - name:Run tests
+    - name: Run tests
       run: |
           poetry run pytest tests
