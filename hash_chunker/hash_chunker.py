@@ -26,7 +26,7 @@ class HashChunker(object):
 
         :param chunk_size: chunk elements limit
         :param all_items_count: count aff all data elements
-        :yield: сhunks
+        :yield: chunks
         """
         if all_items_count == 0 or chunk_size == 0:
             return
