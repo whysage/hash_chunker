@@ -21,6 +21,7 @@ class HashChunker(object):
         chunk_size: int,
         all_items_count: int,
     ) -> Generator[Tuple[str, str], None, None]:
+
         """
         Return hash chunks.
 
@@ -28,6 +29,8 @@ class HashChunker(object):
         :param all_items_count: count aff all data elements
         :yield: chunks
         """
+        self._exceptions_(chunk_size)
+        self._except_all_items_count(all_items_count)
         if all_items_count == 0 or chunk_size == 0:
             return
         (
@@ -53,6 +56,7 @@ class HashChunker(object):
         :param chunks_count: chunks limit
         :yield: chunks
         """
+        self._exceptions_(chunks_count)
         yield from self.get_chunks(1, chunks_count)
 
     def _add_ranges(
@@ -99,3 +103,19 @@ class HashChunker(object):
             hexed = self.hex_zero * zeros_count + hexed
         hexed += self.hex_zero * (self.hash_max_length - len(hexed))
         return hexed[: self.chunk_hash_length]
+
+    def _exceptions_(self, arg):
+        if type(arg) == type(True):
+            raise TypeError("arguments should be int")
+        if not isinstance(arg, int):
+            raise TypeError("arguments should be int")
+        if arg <= 0:
+            raise ValueError("arguments should be positive")
+
+    def _except_all_items_count(self, arg):
+        if type(arg) == type(True):
+            raise TypeError("arguments should be int")
+        if not isinstance(arg, int):
+            raise TypeError("arguments should be int")
+        if arg < 0:
+            raise ValueError("arguments should be positive")
