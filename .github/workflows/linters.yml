@@ -16,11 +16,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+          echo "POETRY_VIRTUALENVS_CREATE=false" >> $GITHUB_OUTPUT
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-      env:
-          POETRY_VIRTUALENVS_CREATE: false
     - name: Analysing the code with linters
       run: |
           poetry run flake8
