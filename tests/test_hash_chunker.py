@@ -2,6 +2,7 @@
 from typing import List, Tuple
 
 import pytest
+from pytest import raises
 
 from hash_chunker import HashChunker
 
@@ -85,3 +86,38 @@ def test_get_fixed_chunks(
     :param expected: expected chunks
     """
     assert list(HashChunker().get_fixed_chunks(chunks_count)) == expected
+
+
+@pytest.mark.parametrize(
+    "chunk_size, all_items_count, expected",
+    [
+        ("1", 1, raises(TypeError)),
+        (1, 5.45, raises(TypeError)),
+        (0, 1, raises(ValueError)),
+        (18, -20, raises(ValueError))
+    ]
+)
+def test_get_chunks_validate(
+        chunk_size: int,
+        all_items_count: int,
+        expected: Exception
+) -> None:
+    with expected:
+        assert list(HashChunker().get_chunks(chunk_size, all_items_count))
+
+
+@pytest.mark.parametrize(
+    "chunks_count, expected",
+    [
+        ("1", raises(TypeError)),
+        (5.45, raises(TypeError)),
+        (0, raises(ValueError)),
+        (-12, raises(ValueError))
+    ]
+)
+def test_get_fixed_chunks_validate(
+        chunks_count: int,
+        expected: Exception
+) -> None:
+    with expected:
+        assert list(HashChunker().get_fixed_chunks(chunks_count))

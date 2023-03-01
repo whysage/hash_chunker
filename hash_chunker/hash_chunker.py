@@ -28,6 +28,10 @@ class HashChunker(object):
         :param all_items_count: count aff all data elements
         :yield: chunks
         """
+        self._validate(
+            chunk_size=chunk_size,
+            all_items_count=all_items_count
+        )
         if all_items_count == 0 or chunk_size == 0:
             return
         (
@@ -53,6 +57,7 @@ class HashChunker(object):
         :param chunks_count: chunks limit
         :yield: chunks
         """
+        self._validate(chunks_count=chunks_count)
         yield from self.get_chunks(1, chunks_count)
 
     def _add_ranges(
@@ -99,3 +104,24 @@ class HashChunker(object):
             hexed = self.hex_zero * zeros_count + hexed
         hexed += self.hex_zero * (self.hash_max_length - len(hexed))
         return hexed[: self.chunk_hash_length]
+
+    def _validate(
+            self,
+            chunk_size: int = 1,
+            all_items_count: int = 0,
+            chunks_count: int = 1,
+    ) -> None:
+        check_args_dict = {
+            "Chunk_size": chunk_size,
+            "All_items_count": all_items_count,
+            "Chunks_count": chunks_count
+        }
+
+        for key, arg in check_args_dict.items():
+            if not isinstance(arg, int):
+                raise TypeError(f"{key} should be integer.")
+            if key == "All_items_count" and arg < 0:
+                raise ValueError(f"{key} should be great or equal 0.")
+            if key == "Chunk_size" or key == "Chunks_count":
+                if arg <= 0:
+                    raise ValueError(f"{key} should be great than 0.")
