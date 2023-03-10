@@ -1,8 +1,7 @@
 """Tests."""
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import pytest
-from pytest import raises
 
 from hash_chunker import HashChunker
 
@@ -91,17 +90,24 @@ def test_get_fixed_chunks(
 @pytest.mark.parametrize(
     "chunk_size, all_items_count, expected",
     [
-        ("1", 1, raises(TypeError)),
-        (1, 5.45, raises(TypeError)),
-        (0, 1, raises(ValueError)),
-        (18, -20, raises(ValueError))
-    ]
+        ("1", 1, pytest.raises(TypeError)),
+        (1, 5.45, pytest.raises(TypeError)),
+        (0, 1, pytest.raises(ValueError)),
+        (18, -20, pytest.raises(ValueError)),
+    ],
 )
 def test_get_chunks_validate(
-        chunk_size: int,
-        all_items_count: int,
-        expected: Exception
+    chunk_size: int,
+    all_items_count: int,
+    expected: Union[ValueError, TypeError],
 ) -> None:
+    """
+    Simple test.
+
+    :param chunk_size: chunk elements limit
+    :param all_items_count: count aff all data elements
+    :param expected: expected exceptions
+    """
     with expected:
         assert list(HashChunker().get_chunks(chunk_size, all_items_count))
 
@@ -109,15 +115,21 @@ def test_get_chunks_validate(
 @pytest.mark.parametrize(
     "chunks_count, expected",
     [
-        ("1", raises(TypeError)),
-        (5.45, raises(TypeError)),
-        (0, raises(ValueError)),
-        (-12, raises(ValueError))
-    ]
+        ("5", pytest.raises(TypeError)),
+        (5.45, pytest.raises(TypeError)),
+        (0, pytest.raises(ValueError)),
+        (-12, pytest.raises(ValueError)),
+    ],
 )
 def test_get_fixed_chunks_validate(
-        chunks_count: int,
-        expected: Exception
+    chunks_count: int,
+    expected: Union[ValueError, TypeError],
 ) -> None:
+    """
+    Simple test.
+
+    :param chunks_count: chunks limit
+    :param expected: expected exceptions
+    """
     with expected:
         assert list(HashChunker().get_fixed_chunks(chunks_count))

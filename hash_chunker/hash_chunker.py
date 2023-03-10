@@ -1,7 +1,7 @@
 """Hash Chunker helper to provide hash ranges for distributed data processing."""
 import math
 from dataclasses import dataclass
-from typing import Generator, Tuple
+from typing import Dict, Generator, Tuple
 
 
 @dataclass
@@ -30,7 +30,7 @@ class HashChunker(object):
         """
         self._validate(
             chunk_size=chunk_size,
-            all_items_count=all_items_count
+            all_items_count=all_items_count,
         )
         if all_items_count == 0 or chunk_size == 0:
             return
@@ -106,15 +106,15 @@ class HashChunker(object):
         return hexed[: self.chunk_hash_length]
 
     def _validate(
-            self,
-            chunk_size: int = 1,
-            all_items_count: int = 0,
-            chunks_count: int = 1,
+        self,
+        chunk_size: int = 1,
+        all_items_count: int = 0,
+        chunks_count: int = 1,
     ) -> None:
         check_args_dict = {
             "Chunk_size": chunk_size,
             "All_items_count": all_items_count,
-            "Chunks_count": chunks_count
+            "Chunks_count": chunks_count,
         }
 
         for key, arg in check_args_dict.items():
@@ -122,6 +122,10 @@ class HashChunker(object):
                 raise TypeError(f"{key} should be integer.")
             if key == "All_items_count" and arg < 0:
                 raise ValueError(f"{key} should be great or equal 0.")
-            if key == "Chunk_size" or key == "Chunks_count":
-                if arg <= 0:
-                    raise ValueError(f"{key} should be great than 0.")
+        self._check_positive_values(check_args_dict)
+
+    def _check_positive_values(self, args: Dict) -> None:
+        keys_for_check = ("Chunks_count", "Chunk_size")
+        for key, arg in args.items():
+            if key in keys_for_check and arg <= 0:
+                raise ValueError(f"{key} should be great than 0.")
