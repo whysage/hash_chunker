@@ -111,21 +111,23 @@ class HashChunker(object):
         all_items_count: int = 0,
         chunks_count: int = 1,
     ) -> None:
-        check_args_dict = {
+        check_args = {
             "Chunk_size": chunk_size,
             "All_items_count": all_items_count,
             "Chunks_count": chunks_count,
         }
 
-        for key, arg in check_args_dict.items():
+        if check_args["All_items_count"] < 0:
+            raise ValueError("All_items_count should be great or equal 0.")
+
+        for key, arg in check_args.items():
             if not isinstance(arg, int):
                 raise TypeError(f"{key} should be integer.")
-            if key == "All_items_count" and arg < 0:
-                raise ValueError(f"{key} should be great or equal 0.")
-        self._check_positive_values(check_args_dict)
+
+        check_args.pop("All_items_count")
+        self._check_positive_values(check_args)
 
     def _check_positive_values(self, args: Dict) -> None:
-        keys_for_check = ("Chunks_count", "Chunk_size")
         for key, arg in args.items():
-            if key in keys_for_check and arg <= 0:
+            if arg <= 0:
                 raise ValueError(f"{key} should be great than 0.")
