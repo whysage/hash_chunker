@@ -79,9 +79,53 @@ def test_get_fixed_chunks(
     expected: List[Tuple[str, str]],
 ) -> None:
     """
-    Simple test.
+    Test validate input arguments.
 
     :param chunks_count: chunks limit
     :param expected: expected chunks
     """
     assert list(HashChunker().get_fixed_chunks(chunks_count)) == expected
+
+
+@pytest.mark.parametrize(
+    "chunk_size, all_items_count",
+    [
+        ("1", 1),
+        (1, 5.45),
+        (0, -2),
+        (18, -20),
+    ],
+)
+def test_get_chunks_validate(
+    chunk_size: int,
+    all_items_count: int,
+) -> None:
+    """
+    Test validate input arguments.
+
+    :param chunk_size: chunk elements limit
+    :param all_items_count: count aff all data elements
+    """
+    with pytest.raises((TypeError, ValueError)):
+        list(HashChunker().get_chunks(chunk_size, all_items_count))
+
+
+@pytest.mark.parametrize(
+    "chunks_count",
+    [
+        ("5",),
+        (5.45,),
+        (0,),
+        (-12,),
+    ],
+)
+def test_get_fixed_chunks_validate(
+    chunks_count: int,
+) -> None:
+    """
+    Simple test.
+
+    :param chunks_count: chunks limit
+    """
+    with pytest.raises((TypeError, ValueError)):
+        list(HashChunker().get_fixed_chunks(chunks_count))

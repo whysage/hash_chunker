@@ -49,7 +49,7 @@ warn_return_any = true
 warn_unused_configs = true
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = "R0205,R0903,W1203"
+disable = "R0205,R0903,W1203,R0201"
 
 [tool.pylint.SIMILARITIES]
 ignore-imports = true
